@@ -1,6 +1,7 @@
 package com.zamozon.controller;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,9 +42,17 @@ public class PaymentController {
 
 	    @Value("${razorpay.api.secret}")
 	    private String apiSecret;
+	    
+//	    private String Link="http://localhost:3000/payment/";
+	    private String Link="https://ecommerce-react-rho-eight.vercel.app/";
 	
+	@Autowired
 	private OrderService orderService;
+	
+	@Autowired
 	private UserService userService;
+	
+	@Autowired
 	private OrderRepository orderRepository;
 	
 	public PaymentController(OrderService orderService,UserService userService,OrderRepository orderRepository) {
@@ -87,7 +96,8 @@ public class PaymentController {
 		      paymentLinkRequest.put("reminder_enable",true);
 
 		      // Set the callback URL and method
-		      paymentLinkRequest.put("callback_url","http://localhost:4200/payment-success?order_id="+orderId);
+		      //to redirect if payment successful
+		      paymentLinkRequest.put("callback_url",Link+orderId);
 		      paymentLinkRequest.put("callback_method","get");
 
 		      // Create the payment link using the paymentLink.create() method
@@ -96,7 +106,10 @@ public class PaymentController {
 		      String paymentLinkId = payment.get("id");
 		      String paymentLinkUrl = payment.get("short_url");
 		      
-		      PaymentLinkResponse res=new PaymentLinkResponse(paymentLinkUrl,paymentLinkId);
+		      PaymentLinkResponse res=new PaymentLinkResponse();
+		      res.setPayment_link_id(paymentLinkId);
+		      res.setPayment_link_url(paymentLinkUrl);
+		      
 		      
 		      PaymentLink fetchedPayment = razorpay.paymentLink.fetch(paymentLinkId);
 		      
@@ -108,7 +121,7 @@ public class PaymentController {
 		      System.out.println("Payment link URL: " + paymentLinkUrl);
 		      System.out.println("Order Id : "+fetchedPayment.get("order_id")+fetchedPayment);
 		      
-		      return new ResponseEntity<PaymentLinkResponse>(res,HttpStatus.ACCEPTED);
+		      return new ResponseEntity<PaymentLinkResponse>(res,HttpStatus.CREATED);
 		      
 		    } catch (RazorpayException e) {
 		    	
@@ -137,16 +150,20 @@ public class PaymentController {
 			order.getPaymentDetails().setPaymentId(paymentId);
 			order.getPaymentDetails().setStatus(PaymentStatus.COMPLETED);
 			order.setOrderStatus(OrderStatus.PLACED);
-//			order.setOrderItems(order.getOrderItems());
+			order.setOrderItems(order.getOrderItems());
 			System.out.println(order.getPaymentDetails().getStatus()+"payment status ");
+			System.out.println(order.getPaymentDetails());
+			System.out.println( order.getPaymentDetails());
 			orderRepository.save(order);
 		}
-		ApiResponse res=new ApiResponse("your order get placed", true);
-	      return new ResponseEntity<ApiResponse>(res,HttpStatus.OK);
+		ApiResponse res=new ApiResponse("your order get placed",true);
+
+		
+	      return new ResponseEntity<ApiResponse>(res,HttpStatus.ACCEPTED);
 	      
 	} catch (Exception e) {
 		System.out.println("errrr payment -------- ");
-		new RedirectView("https://shopwithzamozon.vercel.app/payment/failed");
+		new RedirectView(Link+"failed");
 		throw new RazorpayException(e.getMessage());
 	}
 

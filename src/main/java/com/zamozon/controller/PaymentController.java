@@ -37,15 +37,15 @@ import com.razorpay.RazorpayException;
 @RequestMapping("/api")
 public class PaymentController {
 	
-	   @Value("${razorpay.api.key}")
+	    @Value("${razorpay.api.key}")
 	    private String apiKey;
 
 	    @Value("${razorpay.api.secret}")
 	    private String apiSecret;
-	    
-	    private String Link="http://localhost:3000/payment/";
-//	    private String Link="https://ecommerce-react-rho-eight.vercel.app/";
-	
+
+		@Value("${website}")
+	    private String Link;
+
 	@Autowired
 	private OrderService orderService;
 	

@@ -19,33 +19,34 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
 public class AppConfig {
-	
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		
+
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and()
-		.authorizeHttpRequests(Authorize -> Authorize
-				.requestMatchers("/api/**").authenticated()
-				.anyRequest().permitAll()
+				.and()
+				.authorizeHttpRequests(Authorize -> Authorize
+						.requestMatchers("/api/products/**").permitAll()  // Allow unauthenticated access to /api/products/**
+						.requestMatchers("/api/**").authenticated()       // Require authentication for other /api/** endpoints
+						.anyRequest().permitAll()
 				)
-		.addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-		.csrf().disable()
-		.cors().configurationSource(new CorsConfigurationSource() {
-					
+				.addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+				.csrf().disable()
+				.cors().configurationSource(new CorsConfigurationSource() {
+
 					@Override
 					public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-						
+
 						CorsConfiguration cfg = new CorsConfiguration();
-						
+
 						cfg.setAllowedOrigins(Arrays.asList(
-								
-								"http://localhost:3000", 
-								"http://localhost:4000",
-								"http://localhost:4200",
-								"https://ecommerce-react-rho-eight.vercel.app"
-								
-							)
+
+										"http://localhost:3000",
+										"http://localhost:4000",
+										"http://localhost:4200",
+										"https://ecommerce-react-rho-eight.vercel.app"
+
+								)
 						);
 						//cfg.setAllowedMethods(Arrays.asList("GET", "POST","DELETE","PUT"));
 						cfg.setAllowedMethods(Collections.singletonList("*"));
@@ -54,33 +55,21 @@ public class AppConfig {
 						cfg.setExposedHeaders(Arrays.asList("Authorization"));
 						cfg.setMaxAge(3600L);
 						return cfg;
-						
+
 					}
 				})
-		.and()
-		.httpBasic()
-		.and()
-		.formLogin();
-		
+				.and()
+				.httpBasic()
+				.and()
+				.formLogin();
+
 		return http.build();
-		
+
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 }
-
-
-
-/*
- * Note
- * 1. Whenever an request is hit which starts with "/api/" then those all API will be validated with token
- * 2. Token will be passed during the authorization 
- * 3. JwtValidator will check if the token is not null then only JwtValidator will set the authentication
- * 4. If token is valid then doFilter will execute else error is thrown
- * 
- * 
- * */

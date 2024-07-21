@@ -8,9 +8,12 @@ import com.zamozon.modal.Cart;
 import com.zamozon.modal.CartItem;
 import com.zamozon.modal.Product;
 
+import java.util.List;
+
 public interface CartItemRepository extends JpaRepository<CartItem, Long>{
 
 	@Query("SELECT ci From CartItem ci Where ci.cart=:cart And ci.product=:product And ci.size=:size And ci.userId=:userId")
 	public CartItem isCartItemExist(@Param("cart")Cart cart,@Param("product")Product product,@Param("size")String size, @Param("userId")Long userId);
-	
+
+	List<CartItem> findByUserId(Long userId);
 }

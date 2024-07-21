@@ -1,5 +1,6 @@
 package com.zamozon.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -97,6 +98,21 @@ public class CartItemServiceImplementation implements CartItemService {
 			return opt.get();
 		}
 		throw new CartItemException("cartItem not found with id : "+cartItemId);
+	}
+
+	@Override
+	public void removeAllCartItemsByUserId(Long userId) throws UserException, CartItemException {
+		User user = userService.findUserById(userId);
+		if (user == null) {
+			throw new UserException("User not found with id: " + userId);
+		}
+
+		List<CartItem> cartItems = cartItemRepository.findByUserId(userId);
+		if (cartItems == null || cartItems.isEmpty()) {
+			throw new CartItemException("No cart items found for user id: " + userId);
+		}
+
+		cartItemRepository.deleteAll(cartItems);
 	}
 
 }

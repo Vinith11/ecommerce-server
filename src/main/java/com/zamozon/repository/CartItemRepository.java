@@ -7,9 +7,11 @@ import org.springframework.data.repository.query.Param;
 import com.zamozon.modal.Cart;
 import com.zamozon.modal.CartItem;
 import com.zamozon.modal.Product;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Long>{
 
 	@Query("SELECT ci From CartItem ci Where ci.cart=:cart And ci.product=:product And ci.size=:size And ci.userId=:userId")

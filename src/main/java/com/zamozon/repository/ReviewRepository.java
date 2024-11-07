@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.zamozon.modal.Review;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 	@Query("Select r from Rating r where r.product.id=:productId")

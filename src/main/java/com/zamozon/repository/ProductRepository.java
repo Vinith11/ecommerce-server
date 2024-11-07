@@ -10,8 +10,9 @@ import org.springframework.data.repository.query.Param;
 
 import com.zamozon.modal.Product;
 import com.zamozon.user.domain.ProductSubCategory;
+import org.springframework.stereotype.Repository;
 
-
+@Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	@Query("SELECT p From Product p Where LOWER(p.category.name)=:category")

@@ -1,5 +1,6 @@
 package com.zamozon.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,22 +29,16 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-	private UserRepository userRepository;
-	private PasswordEncoder passwordEncoder;
-	private JwtTokenProvider jwtTokenProvider;
-	private CustomUserDetails customUserDetails;
-	private CartService cartService;
+	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
+	private final JwtTokenProvider jwtTokenProvider;
+	private final CustomUserDetails customUserDetails;
+	private final CartService cartService;
 	
-	public AuthController(UserRepository userRepository,PasswordEncoder passwordEncoder,JwtTokenProvider jwtTokenProvider,CustomUserDetails customUserDetails,CartService cartService) {
-		this.userRepository=userRepository;
-		this.passwordEncoder=passwordEncoder;
-		this.jwtTokenProvider=jwtTokenProvider;
-		this.customUserDetails=customUserDetails;
-		this.cartService=cartService;
-	}
-	
+
 	@PostMapping("/signup")
 	public ResponseEntity<AuthResponse> createUserHandler(@Valid @RequestBody User user) throws UserException{
 		

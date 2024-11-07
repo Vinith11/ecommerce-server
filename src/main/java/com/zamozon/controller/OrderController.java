@@ -2,6 +2,7 @@ package com.zamozon.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,15 +24,12 @@ import com.zamozon.service.UserService;
 
 @RestController
 @RequestMapping("/api/orders")
+@RequiredArgsConstructor
 public class OrderController {
 	
-	private OrderService orderService;
-	private UserService userService;
-	
-	public OrderController(OrderService orderService,UserService userService) {
-		this.orderService=orderService;
-		this.userService=userService;
-	}
+	private final OrderService orderService;
+	private final UserService userService;
+
 	
 	@PostMapping("/")
 	public ResponseEntity<Order> createOrderHandler(@RequestBody Address spippingAddress,

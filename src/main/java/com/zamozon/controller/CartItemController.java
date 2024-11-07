@@ -1,5 +1,6 @@
 package com.zamozon.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,16 +24,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/cart_items")
 @Tag(name="Cart Item Management", description = "create cart item delete cart item")
+@RequiredArgsConstructor
 public class CartItemController {
 
-	private CartItemService cartItemService;
-	private UserService userService;
+	private final CartItemService cartItemService;
+	private final UserService userService;
 	
-	public CartItemController(CartItemService cartItemService,UserService userService) {
-		this.cartItemService=cartItemService;
-		this.userService=userService;
-	}
-	
+
 	@DeleteMapping("/{cartItemId}")
 	public ResponseEntity<ApiResponse>deleteCartItemHandler(@PathVariable Long cartItemId, @RequestHeader("Authorization")String jwt) throws CartItemException, UserException{
 		

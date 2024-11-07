@@ -1,5 +1,6 @@
 package com.zamozon.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +14,11 @@ import com.zamozon.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
 	
-	private UserService userService;
-	
-	public UserController(UserService userService) {
-		this.userService=userService;
-	}
-	
+	private final UserService userService;
+
 	@GetMapping("/profile")
 	public ResponseEntity<User> getUserProfileHandler(@RequestHeader("Authorization") String jwt) throws UserException{
 

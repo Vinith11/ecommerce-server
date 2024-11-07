@@ -2,6 +2,7 @@ package com.zamozon.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,10 @@ import com.zamozon.service.UserService;
 
 @RestController
 @RequestMapping("/api/admin")
+@RequiredArgsConstructor
 public class AdminUserController {
-	
-	@Autowired
-	private UserService userService;
+
+	private final UserService userService;
 	
 	@GetMapping("/users")
 	public ResponseEntity<List<User>> getAllUsers(@RequestHeader("Authorization") String jwt) throws UserException{

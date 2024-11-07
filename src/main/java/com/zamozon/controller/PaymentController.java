@@ -1,6 +1,7 @@
 package com.zamozon.controller;
 
 import com.zamozon.service.CartItemService;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,7 @@ import com.razorpay.RazorpayException;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class PaymentController {
 
 	    @Value("${razorpay.api.key}")
@@ -47,24 +49,12 @@ public class PaymentController {
 		@Value("${website}")
 	    private String Link;
 
-	@Autowired
-	private OrderService orderService;
 
-	@Autowired
-	private UserService userService;
+	private final OrderService orderService;
+	private final UserService userService;
+	private final OrderRepository orderRepository;
+	private final CartItemService cartItemService;
 
-	@Autowired
-	private OrderRepository orderRepository;
-
-	@Autowired
-	private CartItemService cartItemService;
-
-
-	public PaymentController(OrderService orderService,UserService userService,OrderRepository orderRepository) {
-		this.orderService=orderService;
-		this.userService=userService;
-		this.orderRepository=orderRepository;
-	}
 
 	@PostMapping("/payments/{orderId}")
 	public ResponseEntity<PaymentLinkResponse>createPaymentLink(@PathVariable Long orderId,

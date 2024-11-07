@@ -2,6 +2,7 @@ package com.zamozon.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,16 +24,12 @@ import com.zamozon.service.UserService;
 
 @RestController
 @RequestMapping("/api/ratings")
+@RequiredArgsConstructor
 public class RatingController {
 	
-	private UserService userService;
-	private RatingServices ratingServices;
-	
-	public RatingController(UserService userService,RatingServices ratingServices) {
-		this.ratingServices=ratingServices;
-		this.userService=userService;
-		// TODO Auto-generated constructor stub
-	}
+	private final UserService userService;
+	private final RatingServices ratingServices;
+
 
 	@PostMapping("/create")
 	public ResponseEntity<Rating> createRatingHandler(@RequestBody RatingRequest req,@RequestHeader("Authorization") String jwt) throws UserException, ProductException{

@@ -2,6 +2,7 @@ package com.zamozon.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +19,10 @@ import com.zamozon.user.domain.ProductSubCategory;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class UserProductController {
 	
-	private ProductService productService;
-	
-	public UserProductController(ProductService productService) {
-		this.productService=productService;
-	}
-	
+	private final ProductService productService;
 	
 	@GetMapping("/products")
 	public ResponseEntity<Page<Product>> findProductByCategoryHandler(@RequestParam String category,

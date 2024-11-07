@@ -2,6 +2,7 @@ package com.zamozon.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,15 +20,12 @@ import com.zamozon.service.OrderService;
 
 @RestController
 @RequestMapping("/api/admin/orders")
+@RequiredArgsConstructor
 public class AdminOrderController {
 	
-	private OrderService orderService;
-	
-	public AdminOrderController(OrderService orderService) {
-		this.orderService=orderService;
-	}
-	
-	@GetMapping("/")
+	private final OrderService orderService;
+
+	@GetMapping
 	public ResponseEntity<List<Order>> getAllOrdersHandler(){
 		List<Order> orders=orderService.getAllOrders();
 		

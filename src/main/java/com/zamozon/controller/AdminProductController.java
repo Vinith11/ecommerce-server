@@ -2,6 +2,7 @@ package com.zamozon.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,14 +22,11 @@ import com.zamozon.service.ProductService;
 
 @RestController
 @RequestMapping("/api/admin/products")
+@RequiredArgsConstructor
 public class AdminProductController {
 	
-	private ProductService productService;
-	
-	public AdminProductController(ProductService productService) {
-		this.productService = productService;
-	}
-	
+	private final ProductService productService;
+
 	@PostMapping("/")
 	public ResponseEntity<Product> createProductHandler(@RequestBody CreateProductRequest req)throws ProductException{
 		

@@ -1,5 +1,6 @@
 package com.zamozon.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +22,12 @@ import com.zamozon.service.UserService;
 
 @RestController
 @RequestMapping("/api/cart")
+@RequiredArgsConstructor
 public class CartController {
 	
-	private CartService cartService;
-	private UserService userService;
-	
-	public CartController(CartService cartService,UserService userService) {
-		this.cartService=cartService;
-		this.userService=userService;
-	}
+	private final CartService cartService;
+	private final UserService userService;
+
 	
 	@GetMapping("/")
 	public ResponseEntity<Cart> findUserCartHandler(@RequestHeader("Authorization") String jwt) throws UserException{
